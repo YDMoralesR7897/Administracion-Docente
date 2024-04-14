@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Docentes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        form label {
+            font-weight: bold;
+        }
+        form input, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Administración de Docentes</h1>
+    
+    <form id="nuevo-docente-form">
+        <label for="tipoDocumento">Tipo Documento:</label>
+        <input type="text" id="tipoDocumento" required><br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required><br>
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" required><br>
+        <label for="fechaNacimiento">Fecha Nacimiento:</label>
+        <input type="text" id="fechaNacimiento" placeholder="DD/MM/AAAA" required><br>
+        <label for="nivelEstudios">Nivel de Estudios:</label>
+        <input type="text" id="nivelEstudios" required><br>
+        <label for="areaPertenencia">Área de Pertenencia:</label>
+        <input type="text" id="areaPertenencia" required><br>
+        <label for="grado">Grado:</label>
+        <input type="text" id="grado" required><br>
+        <label for="eps">EPS:</label>
+        <input type="text" id="eps" required><br>
+        <label for="salario">Salario:</label>
+        <input type="number" id="salario" required><br>
+        <button type="submit">Agregar Docente</button>
+    </form>
+
+    <table id="docentes-table">
+        <thead>
+            <tr>
+                <th>Tipo Documento</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Fecha Nacimiento</th>
+                <th>Nivel de Estudios</th>
+                <th>Área de Pertenencia</th>
+                <th>Grado</th>
+                <th>EPS</th>
+                <th>Salario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="docentes-list"></tbody>
+    </table>
+
+    <script>
+        let docentes = [
+            {
+                tipoDocumento: "C.C",
+                nombre: "María",
+                apellido: "Gómez",
+                fechaNacimiento: "15/05/1985",
+                nivelEstudios: "Maestría",
+                areaPertenencia: "Matemáticas",
+                grado: "Tercer Semestre",
+                eps: "SaludTotal",
+                salario: 3000000
+            },
+            // Agrega más docentes aquí...
+        ];
+
+        const docentesList = document.getElementById('docentes-list');
+
+        function mostrarDocentes() {
+            docentesList.innerHTML = '';
+            docentes.forEach((docente, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${docente.tipoDocumento}</td>
+                    <td>${docente.nombre}</td>
+                    <td>${docente.apellido}</td>
+                    <td>${docente.fechaNacimiento}</td>
+                    <td>${docente.nivelEstudios}</td>
+                    <td>${docente.areaPertenencia}</td>
+                    <td>${docente.grado}</td>
+                    <td>${docente.eps}</td>
+                    <td>${docente.salario}</td>
+                    <td>
+                        <button onclick="editarDocente(${index})">Editar</button>
+                        <button onclick="eliminarDocente(${index})">Eliminar</button>
+                    </td>
+                `;
+                docentesList.appendChild(row);
+            });
+        }
+
+        function agregarDocente(event) {
+            event.preventDefault();
+            const tipoDocumento = document.getElementById('tipoDocumento').value;
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+            const nivelEstudios = document.getElementById('nivelEstudios').value;
+            const areaPertenencia = document.getElementById('areaPertenencia').value;
+            const grado = document.getElementById('grado').value;
+            const eps = document.getElementById('eps').value;
+            const salario = parseInt(document.getElementById('salario').value);
+
+            const nuevoDocente = {
+                tipoDocumento,
+                nombre,
+                apellido,
+                fechaNacimiento,
+                nivelEstudios,
+                areaPertenencia,
+                grado,
+                eps,
+                salario
+            };
+
+            docentes.push(nuevoDocente);
+            mostrarDocentes();
+            document.getElementById('nuevo-docente-form').reset();
+        }
+
+        function editarDocente(index) {
+            const docente = docentes[index];
+            document.getElementById('tipoDocumento').value = docente.tipoDocumento;
+            document.getElementById('nombre').value = docente.nombre;
+            document.getElementById('apellido').value = docente.apellido;
+            document.getElementById('fechaNacimiento').value = docente.fechaNacimiento;
+            document.getElementById('nivelEstudios').value = docente.nivelEstudios;
+            document.getElementById('areaPertenencia').value = docente.areaPertenencia;
+            document.getElementById('grado').value = docente.grado;
+            document.getElementById('eps').value = docente.eps;
+            document.getElementById('salario').value = docente.salario;
+
+            // Elimina el docente de la lista
+            docentes.splice(index, 1);
+            mostrarDocentes();
+        }
+
+        function eliminarDocente(index) {
+            // Elimina el docente de la lista
+            docentes.splice(index, 1);
+            mostrarDocentes();
+        }
+
+        document.getElementById('nuevo-docente-form').addEventListener('submit', agregarDocente);
+
+        // Mostrar docentes al cargar la página
+        mostrarDocentes();
+    </script>
+</body>
+</html>
